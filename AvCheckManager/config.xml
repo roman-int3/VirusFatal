@@ -1,0 +1,16 @@
+<?xml version='1.0'?>
+<root>
+<mysql>
+	<host>192.168.1.35</host>
+	<user>root</user>
+	<pwd></pwd>
+</mysql>
+<server_role>scanner</server_role>
+<listenPort>9090</listenPort>
+<acUploadDir>C:\VIRUSFATAL\acUpload</acUploadDir>
+<mcUploadDir>C:\VIRUSFATAL\mcUpload</mcUploadDir>
+<avsRootPath>h:\av</avsRootPath>
+<ScanTimeOutSec>30</ScanTimeOutSec>
+<AvUpdateTimeOutMinutes>60</AvUpdateTimeOutMinutes>
+
+</root>

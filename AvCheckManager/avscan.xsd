@@ -1,0 +1,506 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="root">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="av"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="av">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="scanner"/>
+        <xs:element ref="inject"/>
+        <xs:element minOccurs="0" ref="sheduler"/>
+        <xs:element ref="updater"/>
+      </xs:all>
+      <xs:attribute name="name" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="scanner">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="exeFileName"/>
+        <xs:element ref="cmdLine"/>
+        <xs:element ref="reportParser"/>
+        <xs:element ref="resultParser"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="exeFileName" type="xs:string"/>
+  <xs:element name="cmdLine">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="avCmd"/>
+        
+      <xs:element ref="reportCmd"/><xs:element ref="scanFileCmd"/><xs:element ref="scanOptions"/><xs:element ref="shellLpVerb"/></xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="avCmd">
+    <xs:complexType mixed="true">
+      <xs:attribute name="execType" use="required" type="ExecType"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="reportCmd" type="xs:string"/>
+  <xs:element name="scanFileCmd" type="xs:string"/>
+  <xs:element name="scanOptions" type="xs:string"/>
+  <xs:element name="shellLpVerb">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type" use="required" type="ShellLpVerbType"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="reportParser">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice minOccurs="0">
+          <xs:element ref="automation"/>
+          <xs:element ref="reportFromFile"/>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="reportFromFileRegEx"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element ref="addToLog"/>
+          <xs:element ref="ifAppExit"/>
+          <xs:element ref="logFileName"/>
+          <xs:element ref="winCharacteristics"/>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="filtersRegex"/>
+      </xs:sequence>
+      <xs:attribute name="type" use="required" type="ReportParserType"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="reportFromFile">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="automation"/>
+      </xs:choice>
+      <xs:attribute name="delWhenFinish" use="required" type="xs:boolean"/>
+      <xs:attribute name="encoding" use="required" type="xs:string"/>
+      <xs:attribute name="name" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="addToLog">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="item"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ifAppExit">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="writeReport"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="writeReport" type="xs:string"/>
+  <xs:element name="logFileName">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:NCName">
+          <xs:attribute name="encoding" type="xs:NCName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="winCharacteristics">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="title"/>
+        <xs:element ref="class"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="title" type="xs:string"/>
+  <xs:element name="class" type="xs:string"/>
+  <xs:element name="filtersRegex">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="item"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="inject">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="to"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="to">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="func"/>
+      </xs:sequence>
+      <xs:attribute name="compileToStringLine" type="xs:boolean"/>
+      
+      
+      <xs:attribute name="hashStr" type="xs:boolean"/>
+      
+      <xs:attribute name="modName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="func">
+    <xs:complexType mixed="true">
+      <xs:attribute name="glyphDelta" type="xs:hexBinary"/>
+      <xs:attribute name="retval" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sheduler">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="job"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="job">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="automation"/>
+      </xs:sequence>
+      <xs:attribute name="repTimeSec" use="required" type="xs:decimal"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="updater">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="download"/>
+        <xs:element ref="updateDir"/>
+        <xs:element ref="updateCmd"/>
+        <xs:element ref="versionInfo"/>
+      </xs:sequence>
+      <xs:attribute name="refreshInMinutes" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="download">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="url"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="url">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:anyURI">
+          <xs:attribute name="isArchive" type="xs:boolean"/>
+          <xs:attribute name="versionControl" type="xs:boolean"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="updateDir" type="xs:string"/>
+  <xs:element name="updateCmd" type="xs:string"/>
+  <xs:element name="versionInfo">
+    <xs:complexType>
+      <xs:all>
+        
+        
+      <xs:element ref="getVerInfo"/><xs:element ref="verInfoParser"/></xs:all>
+      
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getVerInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="automation"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="automation">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        
+        
+        
+        
+        
+        
+      <xs:group ref="uiAutomationGroup"/></xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="trayGetMenuText">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        
+      <xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="clickType" use="required" type="MouseClickType"/>
+      <xs:attribute name="count" use="required" type="xs:integer"/>
+      <xs:attribute name="fileName" use="required" type="xs:string"/>
+      <xs:attribute name="tooltipRegex" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="trayDblClk">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        
+        
+        
+      <xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="fileName" type="xs:string"/>
+      <xs:attribute name="tooltipRegEx" type="xs:string"/>
+      
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="exec">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        
+        
+      <xs:group ref="uiAutomationGroup" minOccurs="0" maxOccurs="unbounded"/></xs:choice>
+      <xs:attribute name="clsid" type="xs:string"/>
+      <xs:attribute name="cmd" type="xs:string"/>
+      <xs:attribute name="getOutput" type="xs:boolean"/>
+      
+      <xs:attribute name="lpVerb" type="xs:integer"/>
+      <xs:attribute name="path" type="xs:string"/>
+      <xs:attribute name="type" type="ExecType"/>
+    <xs:attribute name="fileName" type="xs:string"/></xs:complexType>
+  </xs:element>
+  <xs:element name="fileRead">
+    <xs:complexType><xs:choice minOccurs="0" maxOccurs="unbounded"><xs:group ref="uiAutomationGroup" minOccurs="0" maxOccurs="unbounded"/></xs:choice>
+      <xs:attribute name="length" use="required" type="xs:integer"/>
+      <xs:attribute name="path" use="required" type="xs:string"/>
+      <xs:attribute name="startOff" use="required" type="xs:integer"/>
+    <xs:attribute name="isOurFileFlagRegEx" type="xs:string"/><xs:attribute name="encoding" type="xs:string"/></xs:complexType>
+  </xs:element>
+  <xs:element name="fileGetLastModified">
+    <xs:complexType><xs:choice minOccurs="0" maxOccurs="unbounded"><xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="addText" use="required" type="xs:string"/>
+      <xs:attribute name="path" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="trayTrackPopupMenu">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        
+        
+      <xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="fileName" use="required" type="xs:string"/>
+      <xs:attribute name="tooltipRegEx" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="menuGetItemState">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        
+      <xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="fileName" use="required" type="xs:string"/>
+      <xs:attribute name="itemPath" use="required" type="xs:string"/>
+      <xs:attribute name="winTitle" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="reportFromFileRegEx">
+    <xs:complexType>
+      <xs:all>
+        
+        
+        
+        
+        
+        
+        
+        
+      <xs:element ref="isOurFileFlag"/><xs:element ref="infected"/><xs:element ref="notInfected"/><xs:element ref="scanEndFlag"/><xs:element ref="infectedFlag"/></xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="isOurFileFlag" type="xs:string"/>
+  <xs:element name="infected" type="xs:string"/>
+  <xs:element name="notInfected" type="xs:string"/>
+  <xs:element name="softName" type="xs:string"/>
+  <xs:element name="softVersion">
+    <xs:complexType mixed="true">
+      <xs:attribute name="static" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="item" type="xs:string"/>
+  <xs:element name="resultParser">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        
+        <xs:element ref="resultSqlite"/>
+      <xs:element ref="resultRegEx"/></xs:choice>
+      
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="resultSqlite">
+    <xs:complexType>
+      <xs:all>
+        
+        
+      <xs:element ref="infectedFlag"/><xs:element ref="resultString"/><xs:element ref="scanEndFlag"/></xs:all>
+      <xs:attribute name="dbFile" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="matchRegEx">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        
+        
+        
+        
+        
+        
+      <xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="ifMatch" type="xs:string" use="required"/>
+      
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="clickByString">
+   
+  <xs:complexType>
+  
+  <xs:choice minOccurs="0" maxOccurs="unbounded">
+  <xs:group ref="uiAutomationGroup"/></xs:choice>
+  
+  <xs:attribute name="string" type="xs:string" use="required"/>
+  </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="setAppContext">
+    <xs:complexType><xs:choice minOccurs="0" maxOccurs="unbounded"><xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="fileName" use="required" type="xs:NCName"/>
+      <xs:attribute name="title" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getText">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        
+        
+      <xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="from" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="clickElem">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        
+        
+        
+        
+        
+        
+        
+      <xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="name" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getClipboardText">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        
+      <xs:group ref="uiAutomationGroup"/></xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sleep">
+    <xs:complexType> <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="ms" use="required" type="xs:integer"/>
+   </xs:complexType>
+  </xs:element>
+  <xs:element name="menuClick">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        
+        
+        
+      <xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="fileName" use="required" type="xs:string"/>
+      <xs:attribute name="itemPath" use="required" type="xs:string"/>
+      <xs:attribute name="type" type="xs:NCName"/>
+      <xs:attribute name="winTitle" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="waitWin">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        
+        
+        
+      <xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="fileName" type="xs:NCName"/>
+      <xs:attribute name="title"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getWinTitle">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        
+      <xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="fileName" use="required" type="xs:NCName"/>
+      <xs:attribute name="titlePattern" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="terminateApp">
+    <xs:complexType><xs:choice minOccurs="0" maxOccurs="unbounded"><xs:group ref="uiAutomationGroup"/> </xs:choice>
+      <xs:attribute name="fileName" type="xs:NCName"/>
+   </xs:complexType>
+  </xs:element>
+  <xs:element name="trayGetTooltip">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        
+        
+        
+      <xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="fileName" use="required" type="xs:string"/>
+      <xs:attribute name="tooltipRegEx" type="xs:string"/>
+      
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="exit">
+    
+  <xs:complexType><xs:choice minOccurs="0" maxOccurs="1"><xs:group ref="uiAutomationGroup" minOccurs="0" maxOccurs="0"/></xs:choice></xs:complexType></xs:element>
+  <xs:element name="infectedFlag">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="resultString">
+    <xs:complexType mixed="true">
+      <xs:attribute name="groupStrFormat" type="xs:string"/>
+      <xs:attribute name="ifGroupCount" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="scanEndFlag" type="xs:string"/>
+  <xs:element name="dbVersion" type="xs:string"/>
+  <xs:element name="lastUpdate">
+    <xs:complexType mixed="true">
+      <xs:attribute name="dateType" type="xs:string"/>
+      <xs:attribute name="fromFile" type="xs:string"/>
+      <xs:attribute name="fromFileAttr" type="xs:string"/>
+      <xs:attribute name="queryType" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="engineVersion" type="xs:string"/>
+  <xs:element name="sendMsg">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        
+        
+        
+      <xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="class" type="xs:NCName"/>
+      <xs:attribute name="lParam" use="required" type="xs:integer"/>
+      <xs:attribute name="msg" use="required" type="xs:integer"/>
+      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="wParam" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="closeApp">
+    <xs:complexType><xs:choice minOccurs="0" maxOccurs="1"/>
+      <xs:attribute name="delWhenFinish" type="xs:boolean"/>
+      <xs:attribute name="encoding" type="xs:NCName"/>
+      <xs:attribute name="reportFromFile" type="xs:string"/>
+      <xs:attribute name="searchLoopLimit" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="regGetValue">
+    <xs:complexType><xs:choice minOccurs="0" maxOccurs="unbounded"><xs:group ref="uiAutomationGroup"/></xs:choice>
+      <xs:attribute name="addText" use="required" type="xs:string"/>
+      <xs:attribute name="key" use="required" type="xs:NCName"/>
+      <xs:attribute name="path" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+<xs:group name="uiAutomationGroup"><xs:choice><xs:element ref="clickElem"/><xs:element ref="sendMsg"/><xs:element ref="exec"/><xs:element ref="trayGetMenuText"/><xs:element ref="trayDblClk"/><xs:element ref="fileRead"/><xs:element ref="fileGetLastModified"/><xs:element ref="getClipboardText"/><xs:element ref="trayTrackPopupMenu"/><xs:element ref="menuGetItemState"/><xs:element ref="sleep"/><xs:element ref="matchRegEx"/><xs:element ref="clickByString"/><xs:element ref="setAppContext"/><xs:element ref="getText"/><xs:element ref="menuClick"/><xs:element ref="waitWin"/><xs:element ref="getWinTitle"/><xs:element ref="fileGetData"/><xs:element ref="terminateApp"/><xs:element ref="trayGetTooltip"/><xs:element ref="exit"/><xs:element ref="closeApp"/><xs:element ref="regGetValue"/></xs:choice></xs:group><xs:simpleType name="ReportParserType"><xs:restriction base="xs:string"><xs:pattern value="logFile"/><xs:pattern value="reportFromFile"/><xs:pattern value="automation"/></xs:restriction></xs:simpleType><xs:element name="verInfoParser"><xs:complexType><xs:choice maxOccurs="unbounded"><xs:element ref="verInfoRegEx"/><xs:element ref="verInfoSqlite"/></xs:choice></xs:complexType></xs:element><xs:element name="verInfoRegEx"><xs:complexType><xs:all><xs:element ref="engineVersion"/><xs:element ref="dbVersion"/><xs:element ref="softVersion"/><xs:element ref="lastUpdate"/><xs:element ref="softName"/></xs:all></xs:complexType></xs:element><xs:element name="verInfoSqlite"><xs:complexType><xs:all><xs:element ref="softVersion"/><xs:element ref="softName"/><xs:element ref="dbVersion"/><xs:element ref="lastUpdate"/><xs:element ref="engineVersion"/></xs:all><xs:attribute name="dbFile" type="xs:string"/></xs:complexType></xs:element><xs:simpleType name="ShellLpVerbType"><xs:restriction base="xs:string"><xs:pattern value="num"/><xs:pattern value="str"/></xs:restriction></xs:simpleType><xs:simpleType name="MouseClickType"><xs:restriction base="xs:string"><xs:pattern value="right"/><xs:pattern value="left"/></xs:restriction></xs:simpleType><xs:simpleType name="ExecType"><xs:restriction base="xs:string"><xs:pattern value="exec"/><xs:pattern value="shell"/><xs:pattern value="console"/></xs:restriction></xs:simpleType><xs:element name="resultRegEx"><xs:complexType><xs:all><xs:element ref="infectedFlag"/><xs:element ref="resultString"/><xs:element ref="scanEndFlag"/></xs:all></xs:complexType></xs:element></xs:schema>

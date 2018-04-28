@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
+
+<log4j:configuration>
+
+  <appender name="CONSOLE-DEBUG" class="org.apache.log4j.ConsoleAppender">
+      <param name="Target" value="System.out"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%d{ISO8601} [%5p] %m at %l%n"/>
+      </layout>
+      <filter class="org.apache.log4j.varia.LevelRangeFilter">
+        <param name="LevelMin" value="ALL"/>
+        <param name="LevelMax" value="INFO"/>
+      </filter>
+  </appender>
+
+  <appender name="CONSOLE-WARN" class="org.apache.log4j.ConsoleAppender">
+      <param name="Target" value="System.err"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%d{ISO8601} [%5p] %m at %l%n"/>
+      </layout>
+      <filter class="org.apache.log4j.varia.LevelRangeFilter">
+        <param name="LevelMin" value="WARN"/>
+      </filter>
+  </appender>
+
+  
+
+  <appender name="LOG_FILE_DEBUG_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+      <param name="file" value="${vfapp.home}/logs/debug.log"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%d{ISO8601} [%5p] %m at %l%n"/>
+      </layout>
+
+      <filter class="org.apache.log4j.varia.LevelRangeFilter">
+        <param name="LevelMin" value="DEBUG"/>
+        <param name="LevelMax" value="DEBUG"/>
+      </filter>
+  </appender>
+
+   <appender name="LOG_FILE_ERROR_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+      <param name="file" value="${vfapp.home}/logs/errors.log"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%d{ISO8601} [%5p] %m at %l%n"/>
+      </layout>
+
+      <filter class="org.apache.log4j.varia.LevelRangeFilter">
+        <param name="LevelMin" value="INFO"/>
+        <param name="LevelMax" value="FATAL"/>
+      </filter>
+  </appender>
+
+<appender name="LOG_FILE_HTTP_SERVER_DEBUG_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+      <param name="file" value="${vfapp.home}/logs/http_debug.log"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%d{ISO8601} [%5p] %m at %l%n"/>
+      </layout>
+
+      <filter class="org.apache.log4j.varia.LevelRangeFilter">
+        <param name="LevelMin" value="DEBUG"/>
+        <param name="LevelMax" value="DEBUG"/>
+      </filter>
+  </appender>
+
+  <category name="UploadFile_Handler" additivity="false">
+      <appender-ref ref="LOG_FILE_HTTP_SERVER_DEBUG_APPENDER"/>
+  </category>
+
+  <category name="StartScan_Handler" additivity="false">
+      <appender-ref ref="LOG_FILE_HTTP_SERVER_DEBUG_APPENDER"/>
+  </category>
+
+<category name="ScanResult_Handler" additivity="false">
+      <appender-ref ref="LOG_FILE_HTTP_SERVER_DEBUG_APPENDER"/>
+  </category>
+ 
+ <category name="ReqHandler" additivity="false">
+      <appender-ref ref="LOG_FILE_HTTP_SERVER_DEBUG_APPENDER"/>
+  </category>
+
+
+
+  <root>
+    <priority value ="debug" />
+ <!---->
+    <appender-ref ref="CONSOLE-DEBUG"/>
+    <appender-ref ref="CONSOLE-WARN"/>
+    
+    <appender-ref ref="LOG_FILE_ERROR_APPENDER"/>
+    <appender-ref ref="LOG_FILE_DEBUG_APPENDER"/>
+    
+  </root>
+
+</log4j:configuration>

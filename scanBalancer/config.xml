@@ -1,0 +1,22 @@
+<?xml version='1.0'?>
+<root>
+<mysql>
+	<host>127.0.0.1</host>
+        <port>3306</port>
+	<user>root</user>
+	<pwd><![CDATA[]]></pwd>
+</mysql>
+
+<esxi control_type="ssh">
+    <login></login>
+    <passwd></passwd>
+    <host></host>
+    <ssh_port></ssh_port>
+    
+    <vm_datastore_path></vm_datastore_path>
+    <av_check_manager>
+        <port>9090</port>
+    </av_check_manager>
+</esxi>
+
+</root>

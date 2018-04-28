@@ -1,0 +1,2450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="avscan.xsd">
+
+	<!-- AVG 9.0 -->
+	<av name="avg">
+		<scanner>
+			<exeFileName>avgscanx.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\avg\avgscanx.exe]]></avCmd>
+				<scanFileCmd><![CDATA[/SCAN="%s"]]></scanFileCmd>
+				<scanOptions><![CDATA[/HEUR]]></scanOptions>
+				<reportCmd><![CDATA[/REPORT="%s\avg_Report.txt"]]></reportCmd>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>avg_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag type="bool"><![CDATA[Found[\s]*infections[\s]*:[\s]*([\d])]]></infectedFlag>
+					<resultString><![CDATA[{%SCAN_FILE_NAME%}[^\s]*([^\r\n]*)]]></resultString>
+					<scanEndFlag><![CDATA[Warnings[\s:\d]*]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="">
+				<func></func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+					
+						<exec type="console" cmd="{%AV_ROOT_PATH%}\avg\avgscanx.exe /SCAN=dummy.exe" getOutput="true">
+						<exit/>
+						</exec>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[Virus\s*Database:\s*Version\s*([^ ]*)]]></dbVersion>
+						<softVersion><![CDATA[Program version\s*([^,]*)]]></softVersion>
+						<lastUpdate><![CDATA[Virus\s*Database:\s*Version\s*[^ ]*\s*([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[engine\s*([^\r]*)]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<!-- Asquared -->
+	<av name="asquared">
+		<scanner>
+			<exeFileName>a2cmd.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\asquared\a2cmd.exe]]></avCmd>
+				<scanFileCmd><![CDATA[/f="%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[/la="%s\asquared_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[/h /r /a]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>asquared_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag type="bool"><![CDATA[Found[\s]*Files:[\s]*([\d]*)]]></infectedFlag>
+					<resultString><![CDATA[detected:[\s]([^\r\n]*)]]></resultString>
+					<scanEndFlag><![CDATA[Scan[\s]*time[\s:\d]*]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to>
+				<func></func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[{%AV_ROOT_PATH%}\asquared\a2cmd.exe /u]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<exec type="console" cmd="{%AV_ROOT_PATH%}\asquared\a2cmd.exe c:\NTDETECT.COM" getOutput="true"/>
+						<exit/>
+
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[]]></dbVersion>
+						<softVersion><![CDATA[Scanner\s*v\.\s*([^\r]*)]]></softVersion>
+						<lastUpdate><![CDATA[Last\s*update:\s*([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<!-- ClamAv 0.95 -->
+	<av name="clamav">
+		<scanner>
+			<exeFileName>clamscan.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\clamav\bin\clamscan.exe]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[--log="%s\clamav_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>clamav_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag type="bool"><![CDATA[Infected[\s]files:[\s]*([\d]*)]]></infectedFlag>
+					<resultString><![CDATA[{%SCAN_FILE_NAME%}[^\s]*[\s]*([^\s]*)]]></resultString>
+					<scanEndFlag><![CDATA[Time[\s:\d.\w()]*]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to>
+				<func></func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[{%AV_ROOT_PATH%}\clamav\bin\freshclam.exe"]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<exec type="console" cmd="{%AV_ROOT_PATH%}\clamav\bin\clamscan.exe -V" getOutput="true"/>
+						<fileRead path="C:\Documents and Settings\All Users\.clamwin\db\daily.cvd" startOff="0" length="47"/>
+						<fileGetLastModified path="C:\Documents and Settings\All Users\.clamwin\db\daily.cvd" addText="lastUpdate="/>
+						<exit/>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[ClamAV-VDB:.*-\d*:([^:]*)]]></dbVersion>
+						<softVersion><![CDATA[ClamAV\s*(\d*\.\d*\.\d*)]]></softVersion>
+						<lastUpdate><![CDATA[lastUpdate=([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<!-- Delete ? -->
+	<av name="vba32">
+		<scanner>
+			<exeFileName>Vba32w.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\vba32\Vba32w.exe]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[/R="%s\vba32_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[/SS- /AR+ /SFX+ /RW+ /HA=2 /MR- /BT- /AS- /PM+ /LNG=en]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>vba32_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag type="bool"><![CDATA[contain[\s]*viruses[\s:\d\-]*infected[\s:\d\-]*infected[\s:]*([\d]*)]]></infectedFlag>
+					<resultString><![CDATA[[^\s][\s]*:[\s]*infected[\s]*([^\r\n]*)]]></resultString>
+					<scanEndFlag><![CDATA[Total[\s]*time[\s:\d]*]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to>
+				<func></func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+
+					<automation>
+						<trayDblClk tooltipRegEx="">
+							<getText>
+								<matchRegEx ifMatch="">
+									<sendMsg name="" msg="16" wParam="0" lParam="0">
+										<exit/>
+									</sendMsg>
+								</matchRegEx>
+							</getText>
+						</trayDblClk>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[]]></dbVersion>
+						<softVersion><![CDATA[]]></softVersion>
+						<lastUpdate><![CDATA[]]></lastUpdate>
+						<engineVersion><![CDATA[]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<!-- Bitdefender 2012 -->
+	<av name="bitdefender">
+		<scanner>
+			<exeFileName>odscanui.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="shell"><![CDATA[{D653647D-D607-4df6-A5B8-48D2BA195F7B}]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[]]></reportCmd>
+				<scanOptions><![CDATA[]]></scanOptions>
+				<shellLpVerb type="num">0</shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="reportFromFile">
+				<reportFromFile name="C:\Documents and Settings\Administrator\Application Data\Bitdefender\Desktop\Profiles\Logs\*.xml" encoding="" delWhenFinish="true">
+					<automation>
+						<terminateApp/>
+					</automation>
+				</reportFromFile>
+
+				<reportFromFileRegEx>
+					<infectedFlag type="string"><![CDATA[(threatName=)]]></infectedFlag>
+					<scanEndFlag><![CDATA[(</ScanSession>)]]></scanEndFlag>
+					<isOurFileFlag><![CDATA[({%SCAN_FILE_NAME%})]]></isOurFileFlag>
+					<infected>
+						<![CDATA[(threatName="[^"]*")]]>
+					</infected>
+					<notInfected>
+						<![CDATA[ScanFinish]]>
+					</notInfected>
+				</reportFromFileRegEx>
+
+
+				<ifAppExit>
+					<writeReport>ScanFinish</writeReport>
+				</ifAppExit>
+
+				<addToLog><![CDATA[ScanFinish]]></addToLog>
+
+				<winCharacteristics>
+					<title><![CDATA[]]></title>
+					<class></class>
+				</winCharacteristics>
+
+				<logFileName>bitdefender_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag><![CDATA[threatName="([^"]*)"]]></infectedFlag>
+					<resultString><![CDATA[threatName="([^"]*)"]]></resultString>
+					<scanEndFlag><![CDATA[ScanFinish]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to>
+				<func></func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<exec type="shell" clsid="{D653647D-D607-4df6-A5B8-48D2BA195F7B}" lpVerb="0" cmd="c:\dummy.exe">
+							<fileGetData path="C:\Documents and Settings\Administrator\Application Data\Bitdefender\Desktop\Profiles\Logs\*.xml" isOurFileFlagRegEx="dummy.exe">
+								<regGetValue key="HKLM" path="SOFTWARE\BitDefender\About\ProductName" addText="ProductName="/>
+								<regGetValue key="HKLM" path="SOFTWARE\BitDefender\About\ProductVersion" addText="Version="/>
+								<exit/>
+							</fileGetData>
+						</exec>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[totalSignatures="([^"]*)]]></dbVersion>
+						<softName><![CDATA[ProductName=([^\r]*)]]></softName>
+						<softVersion><![CDATA[Version=([^\r]*)]]></softVersion>
+						<lastUpdate dateType="timestamp" queryType="xpath" fromFile="C:\Documents and Settings\All Users\Application Data\BitDefender\Desktop\Events\history.xml"><![CDATA[//event[@source='Update'][subject!='Update failed'][not (@timeStamp < preceding::event[@source='Update'][subject!='Update failed']/@timeStamp) 
+and not(@timeStamp < following::event[@source='Update'][subject!='Update failed']/@timeStamp)]/@timeStamp]]>
+						</lastUpdate>
+						<engineVersion><![CDATA[]]></engineVersion>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="f-prot">
+		<scanner>
+			<exeFileName>fpscan.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[c:\Program Files\frisk software\f-prot antivirus for windows\fpscan.exe]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[--output="%s\f-prot_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[--adware -r]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>f-prot_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag type="bool"><![CDATA[Infected[\s]*objects:[\s]([\d]*)]]></infectedFlag>
+					<resultString><![CDATA[\[Found[^<]*<([^>]*)]]></resultString>
+					<scanEndFlag><![CDATA[Running[\s]*time:]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to>
+				<func></func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<exec type="console" cmd="c:\Program Files\frisk software\f-prot antivirus for windows\fpscan.exe --version" getOutput="true"/>
+						<exit/>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[]]></dbVersion>
+						<softVersion><![CDATA[F-PROT\s*Antivirus\s*CLS\s*version\s*([^\s]*)]]></softVersion>
+						<lastUpdate><![CDATA[Virus signatures:\s*([^\s]*)]]></lastUpdate>
+						<engineVersion><![CDATA[Engine\s*version:\s*([^\r]*)]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="trendmicro">
+		<scanner>
+			<exeFileName>uiwinmgr.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="shell"><![CDATA[{48F45200-91E6-11CE-8A4F-0080C81A28D4}]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<scanOptions><![CDATA[]]></scanOptions>
+				<reportCmd><![CDATA[]]></reportCmd>
+				<shellLpVerb type="num">0</shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="automation">
+				<automation>
+					<getText>
+						<matchRegEx ifMatch="All threats resolved">
+							<closeApp/>
+						</matchRegEx>
+						<matchRegEx ifMatch="No threats found">
+							<closeApp/>
+						</matchRegEx>
+					</getText>
+				</automation>
+
+				<ifAppExit>
+					<writeReport>ScanFinish</writeReport>
+				</ifAppExit>
+
+				<addToLog>
+					<item><![CDATA[ScanFinish]]></item>
+				</addToLog>
+				<logFileName>trendmicro_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultSqlite dbFile="C:\Program Files\Trend Micro\UniClient\plugins\EventLog.db">
+					<infectedFlag><![CDATA[]]></infectedFlag>
+					<resultString><![CDATA[[SELECT ThreatName FROM LOG_SUMMARY WHERE InfectedFile="{%SCAN_FILE_PATH_AND_NAME%}"]]></resultString>
+					<scanEndFlag><![CDATA[]]></scanEndFlag>
+				</resultSqlite>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="uiwinmgr.exe" hashStr="true" compileToStringLine="true">
+				<func glyphDelta="1D">ExtTextOutW</func>
+			</to>
+		</inject>
+
+		<sheduler>
+			<job repTimeSec="60">
+				<automation>
+					<trayTrackPopupMenu tooltipRegEx="" fileName="uiSeAgnt.exe">
+						<menuGetItemState itemPath="Protection Against Viruses" fileName="uiSeAgnt.exe" winTitle="">
+							<matchRegEx ifMatch="checked">
+								<menuClick itemPath="Protection Against Viruses" fileName="uiSeAgnt.exe" winTitle="">
+									<waitWin title="Protection Disabled" fileName="uiwinmgr.exe">
+										<getText from="uiwinmgr.exe">
+											<matchRegEx ifMatch="Disable until computer">
+												<clickByString string="Disable">
+													<exit/>
+												</clickByString>
+											</matchRegEx>
+										</getText>
+									</waitWin>
+								</menuClick>
+							</matchRegEx>
+
+							<matchRegEx ifMatch="unchecked">
+								<exit/>
+							</matchRegEx>
+						</menuGetItemState>
+					</trayTrackPopupMenu>
+				</automation>
+			</job>
+		</sheduler>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<fileGetData path="C:\Program Files\Trend Micro\UniClient\ComponentList\Titanium_1033.ini" isOurFileFlagRegEx=""/>
+						<!--trayTrackPopupMenu tooltipRegEx="" fileName="uiSeAgnt.exe">
+							<menuClick itemPath="Check For Program Updates" fileName="uiSeAgnt.exe" winTitle="">
+								<waitWin title="About Your Software" fileName="uiwinmgr.exe">
+									<getText>
+										<matchRegEx ifMatch="You already have the latest updates">
+											<clickByString string="Component">
+												<waitWin title="Components" fileName="uiwinmgr.exe">
+													<getText>
+														<closeWin title="Components" fileName="uiwinmgr.exe">
+															<closeWin title="About Your Software" fileName="uiwinmgr.exe">
+																<exit/>
+															</closeWin>
+														</closeWin>
+													</getText>
+												</waitWin>
+											</clickByString>
+										</matchRegEx>
+									</getText>
+								</waitWin>
+							</menuClick>
+						</trayTrackPopupMenu-->
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+
+						<softVersion static="Trend Micro Titanium"><![CDATA[VIZOR_VERSION=([^\r]*)]]></softVersion>
+						<softName></softName>
+						<dbVersion></dbVersion>
+						<engineVersion></engineVersion>
+						<lastUpdate></lastUpdate>
+
+					</verInfoRegEx>
+
+					<verInfoSqlite dbFile="C:\Program Files\Trend Micro\UniClient\plugins\EventLog.db">
+						<dbVersion><![CDATA[SELECT NewVersion FROM LOG_IAU WHERE Download="pattern-48020000" ORDER BY NewVersion DESC]]></dbVersion>
+						<lastUpdate><![CDATA[SELECT Time FROM LOG_IAU WHERE Download="pattern-48020000" ORDER BY NewVersion DESC]]></lastUpdate>
+						<engineVersion><![CDATA[SELECT NewVersion FROM LOG_IAU WHERE Download="engine-00000004" ORDER BY NewVersion DESC]]></engineVersion>
+						<softName></softName>
+						<softVersion></softVersion>
+					</verInfoSqlite>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+
+
+	
+	<av name="mcafee">
+		<scanner>
+			<exeFileName>csscan.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\mcafee\csscan.exe]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[-Log "%s\mcafee_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[-Secure -PAnalyze -Analyze -MultiExt -Archive -Mime -AllApps -Spyware -Adware -RemAdmin -Rootkits -KeyLoggers]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>mcafee_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag type="bool"><![CDATA[FilesInfected[^:]*:[^\d]*([^\r\n]*)]]></infectedFlag>
+					<resultString><![CDATA[contains.*called\s*"([^"]*)]]></resultString>
+					<scanEndFlag><![CDATA[Ended\s*at[^:]*:]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to>
+				<func></func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<exec type="console" path="{%AV_ROOT_PATH%}\mcafee\csscan.exe dummy.exe" getOutput="true"/>
+						<exit/>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[DAT\s*Version\s*:\s*([^\s]*)]]></dbVersion>
+						<softVersion><![CDATA[Command\s*Line\s*Scanner\s*\(([^\)]*)]]></softVersion>
+						<lastUpdate><![CDATA[]]></lastUpdate>
+						<engineVersion><![CDATA[Engine Version\s*:\s*([^\r]*)]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="nod32">
+		<scanner>
+			<exeFileName>ecls.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\nod32\ecls.exe]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[/log-file="%s\nod32_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[/base-dir={%AV_CURRENT_DIR%} /no-boots /adware /adv-heur /action=none]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>nod32_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag type="bool"><![CDATA[Infected:[\s]*files[\s-]*([\d]*)]]></infectedFlag>
+					<resultString><![CDATA[threat="([^"]*)]]></resultString>
+					<scanEndFlag><![CDATA[Scan[\s]*completed[\s]*at:]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="egui.exe" hashStr="false" compileToStringLine="true">
+				<func>DrawTextW</func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<trayDblClk tooltipRegEx="ESET NOD32" fileName="egui.exe">
+							<waitWin title="ESET NOD32 Antivirus" fileName="egui.exe">
+								<getText from="egui.exe">
+									<matchRegEx ifMatch="Update">
+										<clickByString string="Update">
+											<matchRegEx ifMatch="Last successful update:">
+												<trayGetTooltip tooltipRegEx="ESET NOD32" fileName="egui.exe">
+													<exit/>
+												</trayGetTooltip>
+											</matchRegEx>
+										</clickByString>
+									</matchRegEx>
+								</getText>
+							</waitWin>
+						</trayDblClk>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[signature database:\s*([^\r]*)]]></dbVersion>
+						<softVersion><![CDATA[ESET NOD32 Antivirus.(.*\..*\..*\..*)\r]]></softVersion>
+						<lastUpdate><![CDATA[Last successful update:\s*([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="drweb">
+		<scanner>
+			<exeFileName>dwscancl.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\drweb\dwscancl.exe]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[/RP:"%s\drweb_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[/ARC:500 /ARL:500 ]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>drweb_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag><![CDATA[infected[\s]*with[\s]*([^-]*)]]></infectedFlag>
+					<resultString><![CDATA[infected[\s]*with[\s]*([^-]*)]]></resultString>
+					<scanEndFlag><![CDATA[Scan\s*session\s*completed]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to>
+				<func></func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[{%AV_ROOT_PATH%}\DrWeb\DrWebUpW.exe /go /st /qu /reg- /rp+drwebupw.log]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<exec path="{%AV_ROOT_PATH%}\drweb\dwscancl.exe dummy.exe" getOutput="true"/>
+						<exit/>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[]]></dbVersion>
+						<softVersion><![CDATA[^Engine\s*([^/]*)]]></softVersion>
+						<lastUpdate><![CDATA[^Last\s*updated\s*([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[^Engine\s*([^\(]*)]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="ikarus">
+		<scanner>
+			<exeFileName>T3Scan.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\ikarus\ikarust3\T3Scan.exe]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[-l "%s\ikarus_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>ikarus_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag type="bool"><![CDATA[([\d])[\s]*file[\s]*infected]]></infectedFlag>
+					<resultString><![CDATA[{%SCAN_FILE_NAME%}.+'([^']*)']]></resultString>
+					<scanEndFlag><![CDATA[Used[\s]*time:]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to>
+				<func></func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[http://updates.ikarus.at/cgi-bin/t3download.pl/t3sigs.vdb]]></url>
+			</download>
+			<updateDir><![CDATA[{%AV_ROOT_PATH%}\ikarus\ikarust3]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+
+
+					<automation>
+						<exec type="console" path="{%AV_ROOT_PATH%}\ikarus\ikarust3\T3Scan.exe -ver" getOutput="true"/>
+						<exit/>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[VDB:\s*([^\r]*)]]></dbVersion>
+						<softVersion><![CDATA[IKARUS - T3SCAN\s*([^\r]*)]]></softVersion>
+						<lastUpdate><![CDATA[]]></lastUpdate>
+						<engineVersion><![CDATA[Engine\s*version:\s*([^\r]*)]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+
+		<!--  Переименовываем после инсталяции t3scan.en.lng в t3scan.lng -->
+	</av>
+
+	<av name="antivir">
+		<scanner>
+			<exeFileName>scancl.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\antivir\scancl.exe]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[--log="%s\antivir_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[--nombr /z --heurlevel=2 /q --lang=EN ]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName encoding="UTF-16">antivir_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag type="bool"><![CDATA[Infections[\.\s]*:[\s]*([\d])]]></infectedFlag>
+					<resultString 
+						ifGroupCount="3" 
+						groupStrFormat="%s in file %s"><![CDATA[ALERT:[\s\[]*([^\]]*).*-->(.*)<<<|ALERT:[\s\[]*([^\]]*)]]></resultString>
+
+					<scanEndFlag><![CDATA[Time[\.]*]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to>
+				<func></func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[http://dl.antivir.de/package/fusebundle/win32/int/vdf_fusebundle.zip]]></url>
+			</download>
+			<updateDir><![CDATA[{%AV_ROOT_PATH%}\antivir\]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<exec type="console" path="{%AV_ROOT_PATH%}\antivir\scancl.exe dummy.exe" getOutput="true"/>
+						<exit/>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[VDF\s*Version:\s*([^\r]*)]]></dbVersion>
+						<softVersion><![CDATA[Avira / Windows Version\s*([^\r]*)]]></softVersion>
+						<lastUpdate fromFileAttr=""><![CDATA[]]></lastUpdate>
+						<engineVersion><![CDATA[engine\s*set:\s*([^\r]*)]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="panda">
+		<scanner>
+			<exeFileName>Pavjobs.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\Panda\Panda Antivirus Pro 2012\Pavjobs.exe]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[]]></reportCmd>
+				<scanOptions><![CDATA[/CONTEXTUAL]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="automation">
+				<automation>
+					<getText>
+						<matchRegEx ifMatch="detected!">
+							<matchRegEx ifMatch="Virus\s*name:\s*([^\r]*)">
+								<clickElem name="Cancel">
+									<clickElem name="OK">
+										<closeApp/>
+									</clickElem>
+								</clickElem>
+							</matchRegEx>
+						</matchRegEx>
+
+						<matchRegEx ifMatch="no viruses">
+							<clickElem name="OK">
+								<closeApp/>
+							</clickElem>
+						</matchRegEx>
+					</getText>
+				</automation>
+
+				<addToLog>ScanFinish</addToLog>
+
+				<logFileName>panda_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag><![CDATA[Virus\s*name:\s*([^\r]*)]]></infectedFlag>
+					<resultString><![CDATA[Virus\s*name:\s*([^\r]*)]]></resultString>
+					<scanEndFlag><![CDATA[ScanFinish]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="Pavjobs.exe" hashStr="false" compileToStringLine="true">
+				<func>DrawTextW</func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+
+			<versionInfo>
+				<getVerInfo>
+
+					<automation>
+						<trayDblClk tooltipRegEx="Panda AP" fileName="ApVxdWin.exe">
+							<waitWin title="Panda Antivirus" fileName="Iface.exe">
+								<getWinTitle titlePattern="Panda Antivirus" fileName="Iface.exe">
+									<trayGetTooltip tooltipRegEx="Panda AP" fileName="ApVxdWin.exe">
+										<terminateApp fileName="ApVxdWin.exe"/>
+										<exit/>
+									</trayGetTooltip>
+								</getWinTitle>
+							</waitWin>
+						</trayDblClk>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[]]></dbVersion>
+						<softVersion><![CDATA[(Panda\s*Antivirus[^\(]*)]]></softVersion>
+						<lastUpdate><![CDATA[Updated:\s*([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[Panda\s*Antivirus.*\(([^\)]*)]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="avast">
+		<scanner>
+			<exeFileName>ashCmd.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\avast\ashCmd.exe]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[/r="%s\Avast_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[/_ /d /e=50 /s /t=JZIMRTGCBOEQHK71]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>avast_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag type="bool"><![CDATA[Infected[\s]*files:[\s]*(\d)]]></infectedFlag>
+					<resultString><![CDATA[{%SCAN_FILE_NAME%}([^\r\n]*)]]></resultString>
+					<scanEndFlag><![CDATA[Scan[\s]*stopped]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="AvastUi.exe" hashStr="false" compileToStringLine="true">
+				<func>TextOutW</func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+
+			<versionInfo>
+				<getVerInfo>
+
+					<automation>
+						<trayDblClk tooltipRegEx="avast! Antivirus:" fileName="AvastUi.exe">
+							<waitWin title="avast! Pro Antivirus" fileName="AvastUi.exe">
+								<getText from="AvastUi.exe">
+									<matchRegEx ifMatch="SUMMARY">
+										<clickByString string="SUMMARY">
+											<matchRegEx ifMatch="Virus\s*definitions\s*version:">
+												<matchRegEx ifMatch="Program\s*version:">
+													<sendMsg name="avast! Pro Antivirus" msg="16" wParam="0" lParam="0">
+														<exit/>
+													</sendMsg>
+												</matchRegEx>
+											</matchRegEx>
+										</clickByString>
+									</matchRegEx>
+								</getText>
+							</waitWin>
+						</trayDblClk>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[Virus\s*definitions\s*version:\s*([^\s]*)]]></dbVersion>
+						<softVersion><![CDATA[Program\s*version:\s*([^\s]*)]]></softVersion>
+						<lastUpdate><![CDATA[]]></lastUpdate>
+						<engineVersion><![CDATA[]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="virusbuster">
+		<scanner>
+			<exeFileName>vbscan.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\virusbuster\vbscan.exe]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[--log="%s\virusbuster_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[-a skip --all-files]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>virusbuster_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag type="bool"><![CDATA[pieces[\s]*found[-\s\r\n\w]*\|[\s]*(\d)]]></infectedFlag>
+					<resultString><![CDATA[found:\s*([^\s]*)]]></resultString>
+					<scanEndFlag><![CDATA[vbscan[\s]*exited[\s]*with]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to>
+				<func></func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<!--url isArchive="no"><![CDATA[ftp://anonymous:anonymous@update.virusbuster.hu/pub12/vbuster/vdb12/*.*]]></url-->
+				<url isArchive="true" versionControl="true"><![CDATA[http://www.virusbuster.hu/download/vdb12.zip]]></url>
+			</download>
+			<updateDir><![CDATA[{%AV_ROOT_PATH%}\virusbuster\vdb]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+
+			<versionInfo>
+				<getVerInfo>
+
+					<automation>
+						<exec type="console" path="{%AV_ROOT_PATH%}\virusbuster\vbscan.exe" getOutput="true"/>
+						<exit/>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[vdb\s*([^\s]*)\s*\(]]></dbVersion>
+						<softVersion><![CDATA[vbscan\s*([^\s]*)\s*\(]]></softVersion>
+						<lastUpdate><![CDATA[]]></lastUpdate>
+						<engineVersion><![CDATA[core\s*([^\s]*)\s*\(]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="arcavir">
+		<scanner>
+			<exeFileName>ArcaCmd.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\ArcaBit\ArcaVir\ArcaCmd.exe]]></avCmd>
+				<scanFileCmd><![CDATA[-lang en -s "%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[-report "%s\arcavir_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>arcavir_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag type="bool"><![CDATA[Remaining.*:.*(\d)]]></infectedFlag>
+					<resultString><![CDATA[:\s*(.*)\s*\w:\\.*{%SCAN_FILE_NAME%}]]></resultString>
+					<scanEndFlag><![CDATA[Remaining.*:.*(\d)]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to>
+				<func></func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+
+			<versionInfo>
+				<getVerInfo>
+
+					<automation>
+						<trayGetMenuText clickType="right" count="1" tooltipRegex="ArcaVir - Main Menu" fileName="AVmenu.exe">
+							<matchRegEx ifMatch="Base:">
+								<exit/>
+							</matchRegEx>
+						</trayGetMenuText>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[Base:([^\r]*)]]></dbVersion>
+						<softVersion static="ArcaVir 2011"><![CDATA[]]></softVersion>
+						<lastUpdate><![CDATA[]]></lastUpdate>
+						<engineVersion><![CDATA[]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="sophos">
+		<scanner>
+			<exeFileName>SAV32CLI.EXE</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\Sophos\Sophos Anti-Virus\SAV32CLI.EXE]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[-p="%s\Sophos_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[-s -sc -ss -suspicious -nmbr -pua -v -archive -cab -nb -idedir="{%AV_ROOT_PATH%}\Sophos\Sophos Anti-Virus"]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>sophos_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag type="bool"><![CDATA[(\d)\s*virus\s*\w*\s*discovered\.|(\d)\s*viruses\s*\w*\s*discovered\.]]></infectedFlag>
+					<resultString><![CDATA[>>>\s*\w*\s*'([^']*)'\s*found]]></resultString>
+					<scanEndFlag><![CDATA[Ending\s*Sophos\s*Anti-Virus\.]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to>
+				<func></func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<trayDblClk tooltipRegEx="Sophos Protection" fileName="ALMon.exe">
+							<!--context win_title="" process_name=""-->
+							<waitWin title="Sophos Endpoint Security and Control" fileName="SavMain.exe">
+								<menuClick itemPath="Help/View Product Information" fileName="SavMain.exe" winTitle="Sophos Endpoint Security and Control">
+									<clickElem name="C&amp;opy">
+										<getClipboardText>
+											<matchRegEx ifMatch="Anti-virus and HIPS">
+												<sendMsg name="Sophos Endpoint Security and Control" msg="16" wParam="0" lParam="0">
+													<exit/>
+												</sendMsg>
+											</matchRegEx>
+										</getClipboardText>
+									</clickElem>
+								</menuClick>
+							</waitWin>
+						</trayDblClk>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[Detection\s*data\s*([^\r]*)]]></dbVersion>
+						<softVersion><![CDATA[Sophos\s*Anti-Virus\s*([^\r]*)]]></softVersion>
+						<lastUpdate><![CDATA[Last\s*updated\s*([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[Detection\s*engine\s*([^\r]*)]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<!-- Kaspersky 2012 -->
+	<av name="kav">
+		<scanner>
+			<exeFileName></exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\kav\avp.com]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[/RA:"%s\kav_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[SCAN /i0]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>kav_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag type="bool"><![CDATA[;\s*Total\s*detected:\s*(\d)]]></infectedFlag>
+					<resultString><![CDATA[{%SCAN_FILE_NAME%}[^\s]*[\s]*detected\s*([^\r\n]*)|{%SCAN_FILE_NAME%}[^\s]*[\s]*suspicion\s*([^\r\n]*)]]></resultString>
+					<scanEndFlag><![CDATA[;\s*Total\s*detected:\s*(\d)]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="avp.exe" hashStr="false" compileToStringLine="true">
+				<func>TextOutW</func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+
+				<getVerInfo>
+					<automation>
+						<trayDblClk tooltipRegEx="Kaspersky">
+							<setAppContext title="Kaspersky Anti-Virus" fileName="avp.exe"/>
+							<waitWin>
+								<getText from="avp.exe">
+									<matchRegEx ifMatch="Support">
+										<clickByString string="Support">
+											<waitWin title="Support" fileName="avp.exe">
+												<matchRegEx ifMatch="Application version:">
+													<matchRegEx ifMatch="Databases release date:">
+														<sendMsg name="Support" msg="16" wParam="0" lParam="0">
+															<sendMsg name="Kaspersky Anti-Virus" msg="16" wParam="0" lParam="0">
+																<exit/>
+															</sendMsg>
+														</sendMsg>
+													</matchRegEx>
+												</matchRegEx>
+											</waitWin>
+										</clickByString>
+									</matchRegEx>
+								</getText>
+							</waitWin>
+						</trayDblClk>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[]]></dbVersion>
+						<softVersion><![CDATA[Application\s*version:\s*([^\r]*)]]></softVersion>
+						<lastUpdate><![CDATA[Databases\s*release\s*date:\s*([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="norman">
+		<scanner>
+			<exeFileName>Nvcc.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\norman\nvc\bin\Nvcc.exe]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[/LF:"%s\norman_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[/BS- /MEM- /B- /C+ /SB+]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>norman_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag><![CDATA[Scan result\r\n.*(found\.)]]></infectedFlag>
+					<resultString><![CDATA[Info:\r\n.*{%SCAN_FILE_NAME%}\r\n.*\r\n\s*([^\r]*)]]></resultString>
+					<scanEndFlag><![CDATA[Elapsed\s*time:]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to>
+				<func></func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+
+				<getVerInfo>
+					<automation>
+						<exec type="console" path="{%AV_ROOT_PATH%}\norman\nvc\bin\Nvcc.exe nvcc.exe" getOutput="true"/>
+						<exit/>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[]]></dbVersion>
+						<softVersion><![CDATA[NVC\s*version:\s*([^\s]*)]]></softVersion>
+						<lastUpdate><![CDATA[Scanner\s*engine.*Last updated:\s*([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[Scanner\s*engine:\s*([^\s]*)]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="f-secure">
+		<scanner>
+			<exeFileName>fsav.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\f-secure\Anti-Virus\fsav.exe]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[/REPORT="%s\f-secure_Report.txt"]]></reportCmd>
+				<scanOptions><![CDATA[]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+
+				<logFileName>f-secure_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag><![CDATA[Infection:([^\r\n]*)]]></infectedFlag>
+					<resultString><![CDATA[Infection:([^\r\n]*)]]></resultString>
+					<scanEndFlag><![CDATA[Time:\s*\d*:\d*]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="fsavaui.exe" hashStr="false" compileToStringLine="true">
+				<func>DrawTextW</func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<exec path="{%AV_ROOT_PATH%}\f-secure\FSGUI\fsavaui.exe">
+							<setAppContext title="Settings" fileName="fsavaui.exe"/>
+							<getText>
+								<matchRegEx ifMatch="Other settings">
+									<clickByString string="Other settings">
+										<matchRegEx ifMatch="Virus definitions:">
+											<sendMsg name="" msg="16" wParam="0" lParam="0">
+												<regGetValue key="HKLM" path="SOFTWARE\Data fellows\F-Secure\Anti-Virus\CurrentVersionEx" addText="ProductVer="/>
+												<exit/>
+											</sendMsg>
+										</matchRegEx>
+									</clickByString>
+								</matchRegEx>
+							</getText>
+						</exec>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[]]></dbVersion>
+						<softVersion><![CDATA[ProductVer=([^\r]*)]]></softVersion>
+						<lastUpdate><![CDATA[Virus\s*definitions:\s*([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="ca">
+		<scanner>
+			<exeFileName>caavcmdscan.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="console"><![CDATA[{%AV_ROOT_PATH%}\CA\CA Anti-Virus\caavcmdscan.exe]]></avCmd>
+				<scanFileCmd><![CDATA["/dir:%s"]]></scanFileCmd>
+				<reportCmd><![CDATA[]]></reportCmd>
+				<scanOptions><![CDATA[/h]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+			</cmdLine>
+
+			<reportParser type="logfile">
+				<logFileName>ca_Report.txt</logFileName>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag><![CDATA[Items\s*Detected\s*:\s*(\d*)]]></infectedFlag>
+					<resultString><![CDATA[Name:\s*([^\r]*)]]></resultString>
+					<scanEndFlag><![CDATA[Items\s*Quarantined]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to>
+				<func></func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+
+				<getVerInfo>
+					<automation>
+						<exec type="console" path="{%AV_ROOT_PATH%}\CA\CA Anti-Virus\caavcmdscan.exe /ver" getOutput="true"/>
+						<exit/>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[DAT\s*Version:\s*([^\r]*)]]></dbVersion>
+						<softVersion><![CDATA[]]></softVersion>
+						<lastUpdate><![CDATA[]]></lastUpdate>
+						<engineVersion><![CDATA[Engine\s*Version:\s*([^\r]*)]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	
+
+	<av name="comodo">
+		<scanner>
+			<exeFileName>cavscan.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="exec"><![CDATA[{%AV_ROOT_PATH%}\COMODO\COMODO Internet Security\cavscan.exe]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<scanOptions><![CDATA[]]></scanOptions>
+				<shellLpVerb type="num"></shellLpVerb>
+				<reportCmd><![CDATA[]]></reportCmd>
+			</cmdLine>
+
+			<reportParser type="automation">
+				<automation>
+					<getText>
+						<matchRegEx ifMatch="Scan\s*Finished">
+							<matchRegEx ifMatch="Results">
+								<clickElem name="Results">
+									<matchRegEx ifMatch="Clean">
+										<clickElem name="Clean">
+											<clickElem name="&amp;Yes">
+												<matchRegEx ifMatch="There are no items to show">
+
+													<sendMsg name="COMODO Antivirus - Scan Results" msg="16" wParam="0" lParam="0"/>
+													<exit/>
+												</matchRegEx>
+											</clickElem>
+										</clickElem>
+									</matchRegEx>
+								</clickElem>
+							</matchRegEx>
+
+							<matchRegEx ifMatch="Close">
+								<clickElem name="Close">
+									<exit/>
+								</clickElem>
+							</matchRegEx>
+						</matchRegEx>
+					</getText>
+				</automation>
+
+
+				<ifAppExit>
+					<writeReport>ScanFinish</writeReport>
+				</ifAppExit>
+
+				<logFileName>comodo_Report.txt</logFileName>
+				<addToLog>
+					<item><![CDATA[ScanFinish]]></item>
+				</addToLog>
+			</reportParser>
+
+			<resultParser>
+				<resultSqlite dbFile="C:\Documents and Settings\All Users\Application Data\COMODO\Firewall Pro\cislogs.sdb">
+					<infectedFlag><![CDATA[]]></infectedFlag>
+					<resultString><![CDATA[[SELECT Malware FROM AvEvents WHERE Path='{%SCAN_FILE_PATH_AND_NAME%}']]></resultString>
+					<scanEndFlag><![CDATA[]]></scanEndFlag>
+				</resultSqlite>
+
+				<resultRegEx>
+					<infectedFlag><![CDATA[]]></infectedFlag>
+					<resultString><![CDATA[]]></resultString>
+					<scanEndFlag><![CDATA[]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="cavscan.exe">
+				<func>TextOutW</func>
+			</to>
+
+			<to modName="cfp.exe" hashStr="false" compileToStringLine="true">
+				<func>DrawTextW</func>
+				<func>ExtTextOutW</func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<trayDblClk tooltipRegEx="COMODO Antivirus">
+							<getText from="cfp.exe">
+								<matchRegEx ifMatch="Summary">
+									<clickByString string="Summary">
+										<matchRegEx ifMatch="The virus database has been updated on">
+											<clickByString string="More">
+												<matchRegEx ifMatch="About">
+													<clickByString string="About">
+														<matchRegEx ifMatch="Product Version">
+															<matchRegEx ifMatch="Virus Signature">
+																<sendMsg name="About COMODO Antivirus" msg="16" wParam="0" lParam="0">
+																	<sendMsg name="COMODO Antivirus" msg="16" wParam="0" lParam="0">
+																		<exit/>
+																	</sendMsg>
+																</sendMsg>
+															</matchRegEx>
+														</matchRegEx>
+													</clickByString>
+												</matchRegEx>
+											</clickByString>
+										</matchRegEx>
+									</clickByString>
+								</matchRegEx>
+							</getText>
+						</trayDblClk>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[Virus\s*Signature\s*Database\s*Version:\s*([^\r]*)]]></dbVersion>
+						<softVersion><![CDATA[Product\s*Version:\s*([^\r]*)]]></softVersion>
+						<lastUpdate><![CDATA[The\s*virus\s*database\s*has\s*been\s*updated\s*on\s*([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	
+
+	<av name="Rising">
+		<scanner>
+			<exeFileName>RsMain.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="shell"><![CDATA[{1C7593CB-C1CC-4BA7-BE52-8EEA47F9CB1D}]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<shellLpVerb type="num">0</shellLpVerb>
+				<scanOptions><![CDATA[]]></scanOptions>
+				<reportCmd><![CDATA[]]></reportCmd>
+			</cmdLine>
+
+			<reportParser type="automation">
+				<automation>
+					<getText>
+						<matchRegEx ifMatch="Virus Scan Finished">
+							<clickElem name="&amp;OK">
+								<sendMsg name="Rising Antivirus" msg="16" wParam="0" lParam="0"/>
+								<closeApp/>
+							</clickElem>
+						</matchRegEx>
+					</getText>
+				</automation>
+
+				<logFileName>Rising_Report.txt</logFileName>
+
+				<winCharacteristics>
+					<title><![CDATA[Rising Antivirus]]></title>
+					<class></class>
+				</winCharacteristics>
+
+				<addToLog>
+					<item><![CDATA[ScanFinish]]></item>
+				</addToLog>
+			</reportParser>
+
+			<resultParser>
+				<resultSqlite dbFile="C:\Documents and Settings\All Users\Application Data\Rising\Rav\VirusLog.db">
+					<infectedFlag><![CDATA[]]></infectedFlag>
+					<resultString><![CDATA[SELECT VirusName FROM Table_VirusInfo WHERE Path='{%SCAN_FILE_PATH%}' AND FileName='{%SCAN_FILE_NAME%}']]></resultString>
+					<scanEndFlag><![CDATA[]]></scanEndFlag>
+				</resultSqlite>
+
+				<resultRegEx>
+					<infectedFlag><![CDATA[]]></infectedFlag>
+					<resultString><![CDATA[]]></resultString>
+					<scanEndFlag><![CDATA[]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="RsMain.exe">
+				<func>GetTextExtentPointW</func>
+				<func>TextOutW</func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<fileGetData path="{%AV_ROOT_PATH%}\Rav\def\virusdb.cfg">
+							<fileGetData path="{%AV_ROOT_PATH%}\Rav\CompsVer.inf"/>
+							<exit/>
+						</fileGetData>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[ENDVER=([^\r]*)]]></dbVersion>
+						<softVersion><![CDATA[\[UPDATE\]\r\n.*\r\nVersion=([^\r]*)]]></softVersion>
+						<lastUpdate><![CDATA[UPDATETIME=([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="Norton">
+		<scanner>
+			<exeFileName>ccSvcHst.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="shell"><![CDATA[{FAD61B3D-699D-49B2-BE16-7F82CB4C59CA}]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<shellLpVerb type="num">0</shellLpVerb>
+				<scanOptions><![CDATA[]]></scanOptions>
+				<reportCmd><![CDATA[]]></reportCmd>
+			</cmdLine>
+
+			<reportParser type="automation">
+				<automation>
+					<getText>
+						<matchRegEx ifMatch="All detected security risks have been resolved.">
+							<clickByString string="Detailed">
+								<matchRegEx ifMatch="has been.+resolved">
+									<sendMsg class="Sym_Common_Scan_Window" msg="16" wParam="0" lParam="0"/>
+									<closeApp/>
+								</matchRegEx>
+							</clickByString>
+						</matchRegEx>
+
+						<matchRegEx ifMatch="No viruses">
+							<sendMsg class="Sym_Common_Scan_Window" msg="16" wParam="0" lParam="0"/>
+							<closeApp/>
+						</matchRegEx>
+					</getText>
+				</automation>
+
+				<logFileName>Norton_Report.txt</logFileName>
+
+				<winCharacteristics>
+					<title><![CDATA[]]></title>
+					<class><![CDATA[Sym_Common_Scan_Window]]></class>
+				</winCharacteristics>
+
+				<addToLog>
+					<item><![CDATA[ScanFinish]]></item>
+				</addToLog>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag type="bool"><![CDATA[risks detected:(\d)]]></infectedFlag>
+					<resultString><![CDATA[High(.+)has been|Low(.+)has been|Medium(.+)has been]]></resultString>
+					<scanEndFlag><![CDATA[ScanFinish]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="ccSvcHst.exe" hashStr="false" compileToStringLine="true">
+				<func>TextOutW</func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<setAppContext title="Norton AntiVirus" fileName="ccSvcHst.exe"/>
+						<trayDblClk tooltipRegEx="Norton">
+							<getText>
+								<matchRegEx ifMatch=" ago">
+									<clickByString string=" ago">
+										<matchRegEx ifMatch="Last Virus Definitions Update:">
+											<sendMsg name="" msg="16" wParam="0" lParam="0">
+												<regGetValue key="HKLM" path="SOFTWARE\Norton\*\PRODUCTVERSION" addText="PRODUCTVERSION="/>
+												<exit/>
+											</sendMsg>
+										</matchRegEx>
+									</clickByString>
+								</matchRegEx>
+							</getText>
+						</trayDblClk>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[]]></dbVersion>
+						<softVersion><![CDATA[PRODUCTVERSION=([^\r]*)]]></softVersion>
+						<lastUpdate><![CDATA[Last\s*Virus\s*Definitions\s*Update:\r\n([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="MSEssentials">
+		<scanner>
+			<exeFileName>msseces.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="shell"><![CDATA[{09A47860-11B0-4DA5-AFA5-26D86198A780}]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<shellLpVerb type="num">0</shellLpVerb>
+				<scanOptions><![CDATA[]]></scanOptions>
+				<reportCmd><![CDATA[]]></reportCmd>
+			</cmdLine>
+
+			<reportParser type="automation">
+				<automation>
+					<getText>
+						<matchRegEx ifMatch="detected\s*(\d)*\s*potential threat">
+							<sendMsg class="msseces_class" msg="16" wParam="0" lParam="0">
+								<closeApp reportFromFile="C:\Documents and Settings\All Users\Application Data\Microsoft\Microsoft Antimalware\Support\MPDetection*.log" encoding="UTF-16LE" delWhenFinish="false"/>
+							</sendMsg>
+						</matchRegEx>
+
+						<matchRegEx ifMatch="No threats where detected">
+							<sendMsg class="msseces_class" msg="16" wParam="0" lParam="0">
+								<exit/>
+							</sendMsg>
+						</matchRegEx>
+					</getText>
+				</automation>
+
+				<reportFromFileRegEx>
+					<infectedFlag type="string"><![CDATA[(DETECTION .+) file:.+{%SCAN_FILE_NAME%}]]></infectedFlag>
+					<scanEndFlag><![CDATA[(DETECTION .+) file:.+{%SCAN_FILE_NAME%}]]></scanEndFlag>
+					<isOurFileFlag></isOurFileFlag>
+					<infected>
+						<![CDATA[(DETECTION .+) file:.+{%SCAN_FILE_NAME%}]]>
+					</infected>
+					<notInfected>
+						<![CDATA[ScanFinish]]>
+					</notInfected>
+				</reportFromFileRegEx>
+
+				<logFileName>MSEssentials_Report.txt</logFileName>
+
+				<ifAppExit>
+					<writeReport>ScanFinish</writeReport>
+				</ifAppExit>
+
+				<addToLog><![CDATA[ScanFinish]]></addToLog>
+
+				<winCharacteristics>
+					<title><![CDATA[Microsoft Security Essentials]]></title>
+					<class></class>
+				</winCharacteristics>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag><![CDATA[(DETECTION)]]></infectedFlag>
+					<resultString><![CDATA[DETECTION ([^\r]*)]]></resultString>
+
+					<scanEndFlag><![CDATA[ScanFinish]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="msseces.exe" hashStr="false" compileToStringLine="true">
+				<func>GetTextExtentPointW</func>
+				<func>TextOutW</func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+			<!-- HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft Antimalware\Signature Updates -->
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<trayDblClk tooltipRegEx="Computer status - ">
+							<clickElem name="Additional help options">
+								<menuClick type="popup" itemPath="&amp;About" fileName="msseces.exe" winTitle="">
+									<getText from="msseces.exe">
+										<matchRegEx ifMatch="Security Essentials Version:">
+											<matchRegEx ifMatch="Antivirus definition:">
+												<matchRegEx ifMatch="Engine Version:">
+													<!--push_text/-->
+													<clickElem name="&amp;OK">
+														<clickElem name="Update">
+															<getText from="msseces.exe">
+																<matchRegEx ifMatch="Definitions last checked:">
+																	<sendMsg class="msseces_class" msg="16" wParam="0" lParam="0">
+																		<exit/>
+																	</sendMsg>
+																</matchRegEx>
+															</getText>
+														</clickElem>
+													</clickElem>
+												</matchRegEx>
+											</matchRegEx>
+										</matchRegEx>
+									</getText>
+								</menuClick>
+							</clickElem>
+						</trayDblClk>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[Antivirus\s*definition:\s*([^\r]*)]]></dbVersion>
+						<softVersion><![CDATA[Security\s*Essentials\s*Version:\s*([^\r]*)]]></softVersion>
+						<lastUpdate><![CDATA[Definitions\s*last\s*checked:\s*([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[Engine\s*Version:\s*([^\r]*)]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="QuickHeal">
+		<scanner>
+			<exeFileName>SCANNER.EXE</exeFileName>
+			<cmdLine>
+				<avCmd execType="shell"><![CDATA[{362A3A82-5EF4-422F-817F-A17EBA53E67C}]]></avCmd>
+				<shellLpVerb type="num">0</shellLpVerb>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<scanOptions><![CDATA[/scanonly]]></scanOptions>
+				<reportCmd><![CDATA[]]></reportCmd>
+			</cmdLine>
+
+			<reportParser type="automation">
+				<automation>
+					<getText>
+						<matchRegEx ifMatch="=Finished">
+							<sendMsg name="Quick Heal" msg="16" wParam="0" lParam="0">
+								<closeApp reportFromFile="{%AV_ROOT_PATH%}\QuickHeal\report\*.SNR" encoding="UTF-16LE" delWhenFinish="true"/>
+							</sendMsg>
+						</matchRegEx>
+					</getText>
+				</automation>
+				
+				<reportFromFileRegEx>
+					<infectedFlag type="string"><![CDATA[({%SCAN_FILE_NAME%})]]></infectedFlag>
+					<scanEndFlag><![CDATA[(DNAScan Warning)]]></scanEndFlag>
+					<isOurFileFlag><![CDATA[({%SCAN_FILE_NAME%})]]></isOurFileFlag>
+					<infected>
+						<![CDATA[(Detected:[^"]+"[^"]*")]]>
+					</infected>
+					<notInfected>
+						<![CDATA[ScanFinish]]>
+					</notInfected>
+				</reportFromFileRegEx>
+
+				<ifAppExit>
+					<writeReport>ScanFinish</writeReport>
+				</ifAppExit>
+
+				<addToLog><![CDATA[ScanFinish]]></addToLog>
+				<logFileName>QuickHeal_Report.txt</logFileName>
+				<winCharacteristics>
+					<title><![CDATA[Quick Heal]]></title>
+					<class></class>
+				</winCharacteristics>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag><![CDATA[(Detected:)]]></infectedFlag>
+					<resultString><![CDATA[Detected:[^"]+"([^"]*)"]]></resultString>
+					<scanEndFlag><![CDATA[(ScanFinish)]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="SCANNER.EXE">
+				<func>DrawTextW</func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+			<getVerInfo>
+				<automation>
+					<trayGetTooltip tooltipRegEx="Quick Heal" fileName="ONLINENT.EXE">
+						<exit/>
+					</trayGetTooltip>
+				</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[(\d*\s*\w*\s*\d{4})]]></dbVersion>
+						<softVersion><![CDATA[Quick\s*Heal\s*AntiVirus\s*Pro\s*([^\r]*)]]></softVersion>
+						<lastUpdate><![CDATA[(\d*\s*\w*\s*\d{4})]]></lastUpdate>
+						<engineVersion><![CDATA[]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="vipre">
+		<scanner>
+			<exeFileName>sbamui.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="shell"><![CDATA[{D47F1671-0EAA-4c02-8AC9-960BB08DB951}]]></avCmd>
+				<shellLpVerb type="num">0</shellLpVerb>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<scanOptions><![CDATA[]]></scanOptions>
+				<reportCmd><![CDATA[]]></reportCmd>
+			</cmdLine>
+
+			<reportParser type="reportFromFile">
+				<reportFromFile name="C:\Documents and Settings\All Users\Application Data\Sunbelt\AntiMalware\History\*.xml" encoding="UTF-16LE" delWhenFinish="true">
+					<automation>
+						<getText>
+							<matchRegEx ifMatch="Risk Details...">
+								<clickElem name="Cancel">
+									<sleep ms="1000"/>
+									<matchRegEx ifMatch="Scan Now >">
+										<sendMsg msg="16" wParam="0" lParam="0"/>
+										<exit/>
+									</matchRegEx>
+								</clickElem>
+							</matchRegEx>
+
+							<clickElem name="&amp;Done">
+								<sleep ms="1000"/>
+								<sendMsg msg="16" wParam="0" lParam="0"/>
+								<exit/>
+							</clickElem>
+						</getText>
+					</automation>
+				</reportFromFile>
+
+				<reportFromFileRegEx>
+					<infectedFlag type="bool"><![CDATA[<numThreats found="([\d])"]]></infectedFlag>
+					<scanEndFlag><![CDATA[</SBCSThreatEngineResults>]]></scanEndFlag>
+					<isOurFileFlag><![CDATA[path value=".+{%SCAN_FILE_NAME%}]]></isOurFileFlag>
+					<infected>
+						<![CDATA[path value=".+{%SCAN_FILE_NAME%}.+<threats>(.*)</threats>]]>
+					</infected>
+					<notInfected>
+						<![CDATA[ScanFinish]]>
+					</notInfected>
+				</reportFromFileRegEx>
+
+				<ifAppExit>
+					<writeReport>ScanFinish</writeReport>
+				</ifAppExit>
+
+				<logFileName>Vipre_Report.txt</logFileName>
+				<addToLog><![CDATA[ScanFinish]]></addToLog>
+				<winCharacteristics>
+					<title><![CDATA[VIPRE Antivirus]]></title>
+					<class></class>
+				</winCharacteristics>
+
+				<filtersRegex>
+					<item></item>
+				</filtersRegex>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag><![CDATA[(threat id=)]]></infectedFlag>
+					<resultString><![CDATA[threat id=.+name="([^"]*)]]></resultString>
+					<scanEndFlag><![CDATA[(ScanFinish)]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="sbamui.exe" hashStr="false" compileToStringLine="true">
+				<func>GetTextExtentPointW</func>
+				<func>TextOutW</func>
+				<func>DrawTextW</func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<trayDblClk tooltipRegEx="VIPRE" fileName="sbamui.exe">
+							<menuClick itemPath="Help/&amp;About" fileName="sbamui.exe" winTitle="VIPRE Antivirus">
+								<getText from="sbamui.exe">
+									<matchRegEx ifMatch="VIPRE software version">
+										<matchRegEx ifMatch="Definitions version">
+											<matchRegEx ifMatch="VIPRE engine version">
+												<sendMsg name="About VIPRE" msg="16" wParam="0" lParam="0">
+													<sendMsg name="VIPRE Antivirus" msg="16" wParam="0" lParam="0">
+														<exit/>
+													</sendMsg>
+												</sendMsg>
+											</matchRegEx>
+										</matchRegEx>
+									</matchRegEx>
+								</getText>
+							</menuClick>
+						</trayDblClk>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[Definitions\s*version:\s*([^\r]*)]]></dbVersion>
+						<softVersion><![CDATA[VIPRE\s*software\s*version:\s*([^\r]*)]]></softVersion>
+						<lastUpdate><![CDATA[]]></lastUpdate>
+						<engineVersion><![CDATA[VIPRE\s*engine\s*version:([^\r]*)]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+			</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="V3">
+		<scanner>
+			<exeFileName>V3Medic.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="shell"><![CDATA[{69702222-D225-4D18-B51A-40ED2F31FC25}]]></avCmd>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<shellLpVerb type="num">0</shellLpVerb>
+				<scanOptions><![CDATA[]]></scanOptions>
+				<reportCmd><![CDATA[]]></reportCmd>
+			</cmdLine>
+
+			<reportParser type="automation">
+				<automation>
+					<getText>
+						<matchRegEx ifMatch="The scan has been completed">
+							<sendMsg msg="16" wParam="0" lParam="0"/>
+							<closeApp/>
+						</matchRegEx>
+					</getText>
+				</automation>
+
+				<logFileName>V3_Report.txt</logFileName>
+
+				<winCharacteristics>
+					<title><![CDATA[System Scan - AhnLab V3]]></title>
+					<class><![CDATA[]]></class>
+				</winCharacteristics>
+
+				<addToLog>
+					<item><![CDATA[ScanFinish]]></item>
+				</addToLog>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag><![CDATA[^(.+)Ignored]]></infectedFlag>
+					<resultString><![CDATA[^(.+)Ignored]]></resultString>
+					<scanEndFlag><![CDATA[ScanFinish]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="V3Medic.exe" hashStr="false" compileToStringLine="true">
+				<func>ExtTextOutW</func>
+				<func>DrawTextW</func>
+			</to>
+			<to modName="V3Main.exe" hashStr="false" compileToStringLine="true">
+				<func retval="1">TrackPopupMenuEx</func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<trayDblClk tooltipRegEx="V3 Internet Security" fileName="">
+							<getText from="V3Main.exe">
+								<matchRegEx ifMatch="HELP">
+									<clickByString string="HELP">
+										<matchRegEx ifMatch="Update\s*Version:">
+											<matchRegEx ifMatch="Product\s*Version:">
+												<matchRegEx ifMatch="Engine\s*Version:">
+													<sendMsg name="" msg="16" wParam="0" lParam="0">
+														<exit/>
+													</sendMsg>
+												</matchRegEx>
+											</matchRegEx>
+										</matchRegEx>
+									</clickByString>
+								</matchRegEx>
+							</getText>
+						</trayDblClk>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[Update\s*Version:\s*([^\r]*)]]></dbVersion>
+						<softVersion><![CDATA[Product\s*Version:\s*([^\r]*)]]></softVersion>
+						<lastUpdate><![CDATA[]]></lastUpdate>
+						<engineVersion><![CDATA[Engine\s*Version:\s*([^\r]*)]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="k7">
+		<scanner>
+			<exeFileName>K7AVScan.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="shell"><![CDATA[{FD23B962-BADB-11D7-B0FE-00C026A19B93}]]></avCmd>
+				<shellLpVerb type="num">0</shellLpVerb>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<scanOptions><![CDATA[]]></scanOptions>
+				<reportCmd><![CDATA[]]></reportCmd>
+			</cmdLine>
+
+			<reportParser type="automation">
+				<automation>
+					<getText>
+						<matchRegEx ifMatch="Scan Completed">
+							<sendMsg msg="16" wParam="0" lParam="0"/>
+							<closeApp reportFromFile="C:\Documents and Settings\All Users\Application Data\K7 Computing\K7TSecurity\K7AntiVirus\K7AVLog.Dat" encoding="ASCII"/>
+						</matchRegEx>
+					</getText>
+				</automation>
+
+				<reportFromFileRegEx>
+					<infectedFlag><![CDATA[({%SCAN_FILE_NAME%})]]></infectedFlag>
+					<scanEndFlag><![CDATA[]]></scanEndFlag>
+					<isOurFileFlag><![CDATA[]]></isOurFileFlag>
+					<infected>
+						<![CDATA[{%SCAN_FILE_NAME%}\|[^\|]+(\|[^\|]+\|)]]>
+					</infected>
+					<notInfected>
+						<![CDATA[ScanFinish]]>
+					</notInfected>
+				</reportFromFileRegEx>
+
+				<ifAppExit>
+					<writeReport>ScanFinish</writeReport>
+				</ifAppExit>
+
+				<logFileName>K7_Report.txt</logFileName>
+				<addToLog><![CDATA[ScanFinish]]></addToLog>
+
+				<winCharacteristics>
+					<title><![CDATA[K7AntiVirus Plus Scanner]]></title>
+					<class></class>
+				</winCharacteristics>
+
+				<filtersRegex>
+					<item></item>
+				</filtersRegex>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag><![CDATA[(\|[^\|]+\|)]]></infectedFlag>
+					<resultString><![CDATA[\|([^\|]+)\|]]></resultString>
+					<scanEndFlag><![CDATA[(ScanFinish)]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="K7AVScan.exe">
+				<func>GetTextExtentPointW</func>
+				<func>TextOutW</func>
+				<func>DrawTextW</func>
+			</to>
+
+			<to modName="K7TSecurity.exe" hashStr="false" compileToStringLine="true">
+				<func retval="74">TrackPopupMenuEx</func>
+				<func>GetTextExtentPointW</func>
+				<func>TextOutW</func>
+				<func>DrawTextW</func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<trayTrackPopupMenu tooltipRegEx="K7AntiVirus" fileName="">
+							<getText from="K7TSecurity.exe">
+								<matchRegEx ifMatch="Virus Definitions">
+									<matchRegEx ifMatch="Released on">
+										<matchRegEx ifMatch="Program Version">
+											<sendMsg name="K7AntiVirus Plus" msg="16" wParam="0" lParam="0">
+												<exit/>
+											</sendMsg>
+										</matchRegEx>
+									</matchRegEx>
+								</matchRegEx>
+							</getText>
+						</trayTrackPopupMenu>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[Virus\s*Definitions\s*:\s*([^\r]*)]]></dbVersion>
+						<softVersion><![CDATA[Program\s*Version\s*:\s*([^\r]*)]]></softVersion>
+						<lastUpdate><![CDATA[Released\s*on\s*:\s*([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+
+	<av name="Forti">
+		<scanner>
+			<exeFileName>FortiTray.exe</exeFileName>
+			<cmdLine>
+				<avCmd execType="shell"><![CDATA[{7AE5C558-994B-40B7-8730-2DAC2B96781B}]]></avCmd>
+				<shellLpVerb type="num">0</shellLpVerb>
+				<scanFileCmd><![CDATA["%s"]]></scanFileCmd>
+				<scanOptions><![CDATA[]]></scanOptions>
+				<reportCmd><![CDATA[]]></reportCmd>
+			</cmdLine>
+
+			<reportParser type="automation">
+				<automation>
+					<getText>
+						<matchRegEx ifMatch="Done">
+							<sendMsg msg="16" wParam="0" lParam="0"/>
+							<closeApp reportFromFile="C:\Program Files\Fortinet\FortiClient\logs\*.log" encoding="ASCII" searchLoopLimit="100"/>
+						</matchRegEx>
+					</getText>
+				</automation>
+
+				<reportFromFileRegEx>
+					<infectedFlag><![CDATA[({%SCAN_FILE_NAME%})]]></infectedFlag>
+					<scanEndFlag><![CDATA[]]></scanEndFlag>
+					<isOurFileFlag><![CDATA[({%SCAN_FILE_NAME%})]]></isOurFileFlag>
+					<infected>
+						<![CDATA[{%SCAN_FILE_NAME%}[^:]+([^,]+,)]]>
+					</infected>
+					<notInfected>
+						<![CDATA[ScanFinish]]>
+					</notInfected>
+				</reportFromFileRegEx>
+
+				<ifAppExit>
+					<writeReport>ScanFinish</writeReport>
+				</ifAppExit>
+
+				<logFileName>Forti_Report.txt</logFileName>
+
+				<addToLog><![CDATA[ScanFinish]]></addToLog>
+
+				<winCharacteristics>
+					<title><![CDATA[FortiClient Scan Progress]]></title>
+					<class></class>
+				</winCharacteristics>
+
+				<filtersRegex>
+					<item></item>
+				</filtersRegex>
+			</reportParser>
+
+			<resultParser>
+				<resultRegEx>
+					<infectedFlag><![CDATA[:([^,]+),]]></infectedFlag>
+					<resultString><![CDATA[:([^,]+),]]></resultString>
+					<scanEndFlag><![CDATA[(ScanFinish)]]></scanEndFlag>
+				</resultRegEx>
+			</resultParser>
+		</scanner>
+
+		<inject>
+			<to modName="FortiTray.exe" hashStr="false" compileToStringLine="true">
+				<func>GetTextExtentPointW</func>
+				<func>TextOutW</func>
+				<func>DrawTextW</func>
+			</to>
+		</inject>
+
+		<updater refreshInMinutes="60">
+			<download>
+				<url><![CDATA[]]></url>
+			</download>
+			<updateDir><![CDATA[]]></updateDir>
+			<updateCmd><![CDATA[]]></updateCmd>
+
+			<versionInfo>
+				<getVerInfo>
+					<automation>
+						<trayDblClk tooltipRegEx="FortiClient" fileName="">
+							<getText from="FortiTray.exe">
+								<trayGetTooltip tooltipRegEx="FortiClient" fileName="">
+									<matchRegEx ifMatch="Last\s*successful\s*update:\s*([^\r]*)">
+										<sendMsg name="FortiClient Console" msg="16" wParam="0" lParam="0">
+											<exit/>
+										</sendMsg>
+									</matchRegEx>
+								</trayGetTooltip>
+							</getText>
+						</trayDblClk>
+					</automation>
+				</getVerInfo>
+
+				<verInfoParser>
+					<verInfoRegEx>
+						<dbVersion><![CDATA[AV\s*signature:\s*([^,]*)]]></dbVersion>
+						<softVersion><![CDATA[FortiClient\s*([^\s]*)]]></softVersion>
+						<lastUpdate><![CDATA[Last\s*successful\s*update:\s*([^\r]*)]]></lastUpdate>
+						<engineVersion><![CDATA[AV\s*engine:\s*([^\r]*)]]></engineVersion>
+						<softName></softName>
+					</verInfoRegEx>
+				</verInfoParser>
+			</versionInfo>
+		</updater>
+	</av>
+</root>
